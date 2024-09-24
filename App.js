@@ -1,20 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// App.js
+import React, { useContext } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { AuthProvider, AuthContext } from './AuthProvider';
+import LoginScreen from './screens/Login';
+import Protected from './screens/Protected';
+import { Text } from 'react-native';
+import { SignUp } from './screens/SignUp';
 
-export default function App() {
+const Stack = createStackNavigator();
+
+const AppNavigator = () => {
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <Text>Đang tải...</Text>;  // Hiển thị trạng thái loading
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      {user ? (
+        <>
+          {/* <Stack.Screen name="MainApp" component={} /> */}
+          <Stack.Screen name="Protected" component={Protected} />
+        </>
+      ) : (
+        <>
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        </>
+      )}
+    </Stack.Navigator>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </AuthProvider>
+  );
+};
+
+export default App;
