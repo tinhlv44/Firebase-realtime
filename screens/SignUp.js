@@ -25,20 +25,20 @@ export const SignUp = ({ navigation }) => {
     const { email, password } = values;
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigation.navigate("Home");
+      //navigation.navigate("Home");
     } catch (error) {
       switch (error.code) {
         case "auth/email-already-in-use":
-          setErrorState("This email is already in use.");
+          setErrorState("Email này đã được sử dụng.");
           break;
         case "auth/weak-password":
-          setErrorState("Password is too weak, must be at least 6 characters.");
+          setErrorState("Password quá yếu, phải ít nhất 8 kí tự.");
           break;
         case "auth/invalid-email":
-          setErrorState("Invalid email format.");
+          setErrorState("Định dạng email không hợp lệ.");
           break;
         default:
-          setErrorState("An error occurred during sign-up.");
+          setErrorState("Có lỗi đã xảy ra trong quá trình đăng ký.");
           break;
       }
     }
@@ -49,7 +49,7 @@ export const SignUp = ({ navigation }) => {
       <KeyboardAwareScrollView enableOnAndroid={true}>
         {/* LogoContainer: consits app logo and screen title */}
         <View style={styles.logoContainer}>
-          <Text style={styles.screenTitle}>Create a new account!</Text>
+          <Text style={styles.screenTitle}>Tạo tài khoản mới</Text>
         </View>
         {/* Formik Wrapper */}
         <Formik
@@ -74,7 +74,7 @@ export const SignUp = ({ navigation }) => {
               <TextInput
                 name="email"
                 leftIconName="email"
-                placeholder="Enter email"
+                placeholder="Nhập email"
                 autoCapitalize="none"
                 keyboardType="email-address"
                 textContentType="emailAddress"
@@ -87,7 +87,7 @@ export const SignUp = ({ navigation }) => {
               <TextInput
                 name="password"
                 leftIconName="key-variant"
-                placeholder="Enter password"
+                placeholder="Nhập mật khẩu"
                 autoCapitalize="none"
                 autoCorrect={false}
                 secureTextEntry={passwordVisibility}
@@ -105,7 +105,7 @@ export const SignUp = ({ navigation }) => {
               <TextInput
                 name="confirmPassword"
                 leftIconName="key-variant"
-                placeholder="Enter password"
+                placeholder="Nhập lại mật khẩu"
                 autoCapitalize="none"
                 autoCorrect={false}
                 secureTextEntry={confirmPasswordVisibility}
@@ -126,7 +126,7 @@ export const SignUp = ({ navigation }) => {
               ) : null}
               {/* Signup button */}
               <Button style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Signup</Text>
+                <Text style={styles.buttonText}>Đăng ký</Text>
               </Button>
             </>
           )}
@@ -135,7 +135,7 @@ export const SignUp = ({ navigation }) => {
         <Button
           style={styles.borderlessButtonContainer}
           borderless
-          title={"Already have an account?"}
+          title={"Bạn đã có tài khoản? Đăng nhập"}
           onPress={() => navigation.navigate("Login")}
         />
       </KeyboardAwareScrollView>

@@ -1,9 +1,9 @@
 // src/screens/LoginScreen.js
-import React, { useState, useContext } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import React, { useState, useContext } from "react";
+import { Text, StyleSheet, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import { Formik } from "formik";
-import { AuthContext } from '../AuthProvider';
+import { AuthContext } from "../AuthProvider";
 import { View, TextInput, Logo, Button, FormErrorMessage } from "../components";
 import { Images, Colors } from "../config";
 import { useTogglePasswordVisibility } from "../hooks";
@@ -16,17 +16,35 @@ const LoginScreen = ({ navigation }) => {
     useTogglePasswordVisibility();
 
   const handleLogin = (values) => {
-    const {email, password} = values
-    login(email, password);
+    const { email, password } = values;
+    try {
+      login(email, password);
+    } catch (error) {
+      switch (error.code) {
+        case "auth/invalid-credential":
+          setErrorState("Email hoặc mật khẩu không chính xác");
+          Alert.alert(
+            "Đăng nhập thất bại",
+            "Email hoặc mật khẩu không chính xác"
+          );
+          break;
+        default:
+        setErrorState("Email hoặc mật khẩu không chính xác");
+          Alert.alert(
+            "Đăng nhập thất bại",
+            "Email hoặc mật khẩu không chính xác."
+          );
+          break;
+      }
+    }
   };
 
   return (
     <>
-
-    <View isSafe style={styles.container}>
+      <View isSafe style={styles.container}>
         <KeyboardAwareScrollView enableOnAndroid={true}>
           <View style={styles.logoContainer}>
-            <Text style={styles.screenTitle}>Welcome back!</Text>
+            <Text style={styles.screenTitle}>Đăng nhập</Text>
           </View>
           <Formik
             initialValues={{
@@ -49,7 +67,7 @@ const LoginScreen = ({ navigation }) => {
                 <TextInput
                   name="email"
                   leftIconName="email"
-                  placeholder="Enter email"
+                  placeholder="Nhập email"
                   autoCapitalize="none"
                   keyboardType="email-address"
                   textContentType="emailAddress"
@@ -65,7 +83,7 @@ const LoginScreen = ({ navigation }) => {
                 <TextInput
                   name="password"
                   leftIconName="key-variant"
-                  placeholder="Enter password"
+                  placeholder="Nhập mật khẩu"
                   autoCapitalize="none"
                   autoCorrect={false}
                   secureTextEntry={passwordVisibility}
@@ -86,7 +104,7 @@ const LoginScreen = ({ navigation }) => {
                 ) : null}
                 {/* Login button */}
                 <Button style={styles.button} onPress={handleSubmit}>
-                  <Text style={styles.buttonText}>Login</Text>
+                  <Text style={styles.buttonText}>Đăng nhập</Text>
                 </Button>
               </>
             )}
@@ -95,67 +113,66 @@ const LoginScreen = ({ navigation }) => {
           <Button
             style={styles.borderlessButtonContainer}
             borderless
-            title={"Create a new account?"}
-            onPress={() => navigation.navigate('SignUp')}
+            title={"Bạn muốn tạo 1 tài khoản?"}
+            onPress={() => navigation.navigate("SignUp")}
           />
           <Button
             style={styles.borderlessButtonContainer}
             borderless
-            title={"Forgot Password"}
-            onPress={() => navigation.navigate('ForgotPassword')}
+            title={"Quên mật khẩu"}
+            onPress={() => navigation.navigate("ForgotPassword")}
           />
         </KeyboardAwareScrollView>
       </View>
     </>
-    
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: Colors.white,
-      paddingHorizontal: 12,
-    },
-    logoContainer: {
-      alignItems: "center",
-    },
-    screenTitle: {
-      fontSize: 32,
-      fontWeight: "700",
-      color: Colors.black,
-      paddingTop: 20,
-    },
-    footer: {
-      backgroundColor: Colors.white,
-      paddingHorizontal: 12,
-      paddingBottom: 48,
-      alignItems: "center",
-    },
-    footerText: {
-      fontSize: 14,
-      fontWeight: "700",
-      color: Colors.orange,
-    },
-    button: {
-      width: "100%",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 8,
-      backgroundColor: Colors.orange,
-      padding: 10,
-      borderRadius: 8,
-    },
-    buttonText: {
-      fontSize: 20,
-      color: Colors.white,
-      fontWeight: "700",
-    },
-    borderlessButtonContainer: {
-      marginTop: 16,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  });
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    paddingHorizontal: 12,
+  },
+  logoContainer: {
+    alignItems: "center",
+  },
+  screenTitle: {
+    fontSize: 32,
+    fontWeight: "700",
+    color: Colors.black,
+    paddingTop: 20,
+  },
+  footer: {
+    backgroundColor: Colors.white,
+    paddingHorizontal: 12,
+    paddingBottom: 48,
+    alignItems: "center",
+  },
+  footerText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: Colors.orange,
+  },
+  button: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 8,
+    backgroundColor: Colors.orange,
+    padding: 10,
+    borderRadius: 8,
+  },
+  buttonText: {
+    fontSize: 20,
+    color: Colors.white,
+    fontWeight: "700",
+  },
+  borderlessButtonContainer: {
+    marginTop: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

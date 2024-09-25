@@ -5,8 +5,8 @@ import { Button } from '../components';
 import { Colors } from '../config';
 import { useEffect } from 'react';
 
-const ProtectedScreen = ({ navigation }) => {
-  const { user, logout, printTokenInfo ,loading} = useContext(AuthContext);
+const Home = ({ navigation }) => {
+  const { user, logout ,loading} = useContext(AuthContext);
 
   useEffect(() => {
     if (!loading) {
@@ -24,19 +24,18 @@ const ProtectedScreen = ({ navigation }) => {
   if (!user) {
     return null; // Hoặc một cái gì đó phù hợp với trạng thái không có người dùng
   }
-printTokenInfo()
 
   return (
     <SafeAreaView style={{marginTop: 90}}>
-      <Text>Chào mừng bạn đến với màn hình bảo vệ!</Text>
+      <Text>Chào mừng, {user.email} </Text>
       <Button style={styles.button} title={'Đăng xuất'} onPress={logout}>
-      <Text style={styles.btn}>Logout</Text>
+      <Text style={styles.btn}>Đăng xuất</Text>
       </Button>
     </SafeAreaView>
   );
 };
 
-export default ProtectedScreen;
+export default Home;
 
 const styles = StyleSheet.create({
     btn: {
